@@ -1,26 +1,21 @@
-package com.example.marvelapp
+package com.example.marvelapp.ui.screens.characters
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.marvelapp.data.viewmodel.CharactersViewModel
 import com.example.marvelapp.databinding.ActivityCharactersBinding
+import com.example.marvelapp.ui.screens.character.CharacterActivity
+import com.example.marvelapp.ui.screens.character.CharacterActivity.Companion.CHARACTER_ID
+//import com.example.marvelapp.ui.screens.character.CharacterActivity.Companion.CHARACTER_ID
 import com.example.marvelapp.ui.screens.characters.rv.RVCharactersAdapter
-import com.example.marvelapp.ui.theme.MarvelAppTheme
+import com.example.marvelapp.ui.screens.description.DescriptionActivity
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -38,12 +33,50 @@ class MainActivity : ComponentActivity() {
         initUiStateLifecycle()
     }
     private fun initRV() {
-        rvCharactersAdapter = RVCharactersAdapter()
+        rvCharactersAdapter = RVCharactersAdapter(
+            onComicsClickListener = {characterId ->
+                launchCharacterActivity(characterId)
+            },
+            onDescriptionClickListener = {descriptionId ->
+                launchDescriptionActivity(descriptionId)
+            }
+        )
         binding.rvCharacters.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = rvCharactersAdapter
         }
     }
+
+    private fun launchCharacterActivity(characterId: Int) {
+        startActivity(
+            Intent(
+                this,
+                CharacterActivity::class.java
+            ).apply {
+                putExtras(
+                    bundleOf(
+                        CHARACTER_ID to characterId
+                    )
+                )
+            }
+        )
+    }
+
+    private fun launchDescriptionActivity(locationId: Int) {
+        startActivity(
+            Intent(
+                this,
+                DescriptionActivity::class.java
+            ).apply {
+                putExtras(
+                    bundleOf(
+                       // LOCATION_ID to locationId
+                    )
+                )
+            }
+        )
+    }
+
 
     @SuppressLint("NotifyDataSetChanged")
     private fun initUiStateLifecycle() {

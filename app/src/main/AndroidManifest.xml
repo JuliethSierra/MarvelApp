@@ -15,10 +15,16 @@
         android:theme="@style/Theme.MarvelApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.screens.description.DescriptionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.screens.character.CharacterActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity2"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.screens.characters.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MarvelApp">

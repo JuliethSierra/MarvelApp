@@ -36,6 +36,7 @@ class CharactersViewModel : ViewModel() {
             listCharacters = response.data.results,
             isLoading = false
         )
+
     }
 
 
