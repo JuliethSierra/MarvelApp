@@ -18,6 +18,10 @@ class CharactersPostViewHolder(
                 onComicsClickListener(character.id)
             }
 
+            btnSeries.setOnClickListener{
+                onDescriptionClickListener(character.id)
+            }
+
             idCharacter.text = "id: ${character.id}"
             tvCharacterName.text = character.name
             loadImage(character)

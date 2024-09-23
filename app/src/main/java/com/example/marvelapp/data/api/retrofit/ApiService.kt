@@ -1,11 +1,9 @@
 package com.example.marvelapp.data.api.retrofit
 
-import com.example.marvelapp.data.api.models.Character
-import com.example.marvelapp.data.api.models.Comic
-import com.example.marvelapp.data.api.models.Comics
 import com.example.marvelapp.data.api.models.Response
 import com.example.marvelapp.data.api.models.ResponseCharacter
 import com.example.marvelapp.data.api.models.ResponseComics
+import com.example.marvelapp.data.api.models.ResponseSeries
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -35,4 +33,11 @@ interface ApiService {
         @Query("hash") hash: String = RetrofitService.hash()
     ): ResponseComics
 
+    @GET("/v1/public/series/{seriesId}")
+    suspend fun getSeriesById(
+        @Path("seriesId") id: Int,
+        @Query("apikey") apikey: String = RetrofitService.API_KEY,
+        @Query("ts") ts: String = RetrofitService.timestamp,
+        @Query("hash") hash: String = RetrofitService.hash()
+    ): ResponseSeries
 }

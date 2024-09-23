@@ -1,12 +1,12 @@
 package com.example.marvelapp.data.viewmodel
 
+import SeriesUiState
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.marvelapp.data.api.models.Character
-import com.example.marvelapp.data.api.models.Comic
+import com.example.marvelapp.data.api.models.SeriesID
 import com.example.marvelapp.data.api.retrofit.RetrofitService
-import com.example.marvelapp.ui.screens.character.uiState.CharacterUiState
 import com.example.marvelapp.utils.getIdFromUrl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,15 +14,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class CharacterViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(CharacterUiState())
-    val uiState: StateFlow<CharacterUiState> = _uiState.asStateFlow()
+class SeriesViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow(SeriesUiState())
+    val uiState: StateFlow<SeriesUiState> = _uiState.asStateFlow()
 
     private val retrofitApi by lazy {
         RetrofitService.getInstance()
     }
 
-    fun getCharacterInfo(id: Int) {
+    fun getSeriesCharacterInfo(id: Int) {
         viewModelScope.launch {
             val responseCharacter = retrofitApi.getCharacterById(id = id)
             Log.d("AndroidRuntime", responseCharacter.toString())
@@ -34,31 +34,31 @@ class CharacterViewModel : ViewModel() {
                 isCharacterLoading = false
             )
             _uiState.value = newUiState
-            setCharactersComics(responseCharacter.data.results.first())
+            setCharactersSeries(responseCharacter.data.results.first())
         }
     }
 
-    private suspend fun setCharactersComics(character: Character) {
-        val comics = arrayListOf<Comic>()
-        character.characterComics.items.subList(0, character.characterComics.items.size / 2) // Asegúrate de que la sublista esté basada en `comics.items`
+    private suspend fun setCharactersSeries(character: Character) {
+        val series = arrayListOf<SeriesID>()
+        character.characterSeries.items
+            .subList(0, character.characterSeries.items.size / 2) // Asegúrate de que la sublista esté basada en `comics.items`
             .forEach { item ->
                 val comicId = item.resourceURI.getIdFromUrl()
                 comicId?.let { id ->
-                    val comicResponse = retrofitApi.getComicById(id)
-                    Log.d("AndroidRuntime", comicResponse.toString())
-                    Log.d("AndroidRuntime", "comics ${comicResponse.data}")
-                    Log.d("AndroidRuntime", "List comics ${comicResponse.data.results}")// Obtén la respuesta del cómic
-                    comicResponse.data.results.forEach { comic ->
-                        comics.add(comic) // Agrega cada cómic individualmente a la lista
+                    val seriesResponse = retrofitApi.getSeriesById(id)
+                    Log.d("AndroidRuntime", seriesResponse.toString())
+                    Log.d("AndroidRuntime", "series ${seriesResponse.data}")
+                    Log.d("AndroidRuntime", "List series ${seriesResponse.data.results}")// Obtén la respuesta del cómic
+                    seriesResponse.data.results.forEach { seriesID ->
+                        series.add(seriesID) // Agrega cada cómic individualmente a la lista
                     }
                 }
             }
         _uiState.update {
             _uiState.value.copy(
-                comics = comics,
-                isComicListLoading = false
+                series = series,
+                isSeriesListLoading = false
             )
         }
     }
-
 }

@@ -13,9 +13,9 @@ import com.example.marvelapp.data.viewmodel.CharactersViewModel
 import com.example.marvelapp.databinding.ActivityCharactersBinding
 import com.example.marvelapp.ui.screens.character.CharacterActivity
 import com.example.marvelapp.ui.screens.character.CharacterActivity.Companion.CHARACTER_ID
-//import com.example.marvelapp.ui.screens.character.CharacterActivity.Companion.CHARACTER_ID
 import com.example.marvelapp.ui.screens.characters.rv.RVCharactersAdapter
-import com.example.marvelapp.ui.screens.description.DescriptionActivity
+import com.example.marvelapp.ui.screens.series.SeriesActivity
+import com.example.marvelapp.ui.screens.series.SeriesActivity.Companion.SERIES_CHARACTER_ID
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -37,8 +37,8 @@ class MainActivity : ComponentActivity() {
             onComicsClickListener = {characterId ->
                 launchCharacterActivity(characterId)
             },
-            onDescriptionClickListener = {descriptionId ->
-                launchDescriptionActivity(descriptionId)
+            onDescriptionClickListener = {seriesCharacterId ->
+                launchDescriptionActivity(seriesCharacterId)
             }
         )
         binding.rvCharacters.apply {
@@ -62,15 +62,15 @@ class MainActivity : ComponentActivity() {
         )
     }
 
-    private fun launchDescriptionActivity(locationId: Int) {
+    private fun launchDescriptionActivity(seriesCharacterId: Int) {
         startActivity(
             Intent(
                 this,
-                DescriptionActivity::class.java
+                SeriesActivity::class.java
             ).apply {
                 putExtras(
                     bundleOf(
-                       // LOCATION_ID to locationId
+                        SERIES_CHARACTER_ID to seriesCharacterId
                     )
                 )
             }
